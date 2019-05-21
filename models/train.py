@@ -100,7 +100,7 @@ if __name__ == '__main__':
     model_checkpoint = ModelCheckpoint(model_save_path+"unet_spine.hdf5", monitor='loss', verbose=2, save_best_only=True)
     history = LossHistory()
     model.fit_generator(trainGen, steps_per_epoch=1104*2/4, validation_data=validGen, validation_steps=62,
-                        epochs=30, verbose=1, callbacks=[history])                   #validation_steps=126*2
+                        epochs=60, verbose=1, callbacks=[history])                   #validation_steps=126*2
     history.loss_plot('epoch')
 
     # model = load_model(model_save_path + "2019-05-18_17-13_98.24.h5")
