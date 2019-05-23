@@ -133,13 +133,13 @@ def saveResult(save_path,npyfile,flag_multi_class = False, num_class = 2):
 if __name__ == '__main__':
     train_data_src = "E:/data/spine/train/image/"
     train_label_src = "E:/data/spine/train/label/"
-    train_data_path = "D:/pythoncode/segment/data/spine/train/image/"
-    train_label_path = "D:/pythoncode/segment/data/spine/train/label/"
+    train_data_path = "../data/spine/train/image/"
+    train_label_path = "../data/spine/train/label/"
     test_data_src = "E:/data/spine/test/"
-    test_data_path = "D:/pythoncode/segment/data/spine/test/image/"
+    test_data_path = "../data/spine/test/image/"
 
-    train_data = "D:/pythoncode/segment/data/spine/train/image1/"
-    train_label = "D:/pythoncode/segment/data/spine/train/label1/"
+    train_data = "../data/spine/train/image1/"
+    train_label = "../data/spine/train/label1/"
     # images = os.listdir(train_data)
     # for image_name in images:
     #     if "image" in image_name:
@@ -155,8 +155,8 @@ if __name__ == '__main__':
 
     data_gen_args = dict(rotation_range=0.2, width_shift_range=0.05, height_shift_range=0.05,
                          shear_range=0.05, zoom_range=0.05, horizontal_flip=True, fill_mode='nearest')
-    save_temp = 'D:/pythoncode/segment/data/spine/train/save'
-    myGene = trainGenerator(2, 'D:/pythoncode/segment/data/spine/train', 'image', 'label', data_gen_args, save_to_dir=False)
+    save_temp = '../data/spine/train/save'
+    myGene = trainGenerator(2, '../data/spine/train', 'image', 'label', data_gen_args, save_to_dir=False)
 
     # model = unet(input_size=(880, 880, 1))
     # model_checkpoint = ModelCheckpoint('unet_membrane.hdf5', monitor='loss', verbose=1, save_best_only=True)

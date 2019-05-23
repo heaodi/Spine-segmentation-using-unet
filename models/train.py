@@ -17,8 +17,8 @@ config.gpu_options.per_process_gpu_memory_fraction = 0.7
 config.gpu_options.allow_growth = True
 set_session(tf.Session(config=config))
 
-model_save_path = 'D:/pythoncode/segment/data/save_models/'
-savemodel_threshold = 0.981  # 保存模型的最低准确率
+model_save_path = '../data/save_models/'
+savemodel_threshold = 0.982  # 保存模型的最低准确率
 max_acc = 0
 
 
@@ -81,29 +81,32 @@ class LossHistory(keras.callbacks.Callback):
 
 
 if __name__ == '__main__':
-    train_path = "D:/pythoncode/segment/data/spine/train/"
-    valid_path = "D:/pythoncode/segment/data/spine/valid/"
-    train_data = "D:/pythoncode/segment/data/spine/train/image/"
-    train_label = "D:/pythoncode/segment/data/spine/train/label/"
-    test_data = "D:/pythoncode/segment/data/spine/test/image1/"
-    predict_path = "D:/pythoncode/segment/data/spine/test/predict/"
-    # train_data = "D:/pythoncode/segment/data/spine/train/image1/"
-    # train_label = "D:/pythoncode/segment/data/spine/train/label1/"
+    # train_path = "D:/pythoncode/segment/data/spine/train/" #绝对路径
+    train_path = "../data/spine/train/"
+    valid_path = "../data/spine/valid/"
+    train_data = "../data/spine/train/image/"
+    train_label = "../data/spine/train/label/"
+    test_data = "../data/spine/test/image1/"
+    predict_path = "../data/spine/test/predict/"
+    # train_data = "../data/spine/train/image1/"
+    # train_label = "../data/spine/train/label1/"
 
     data_gen_args = dict(samplewise_std_normalization=False, samplewise_center=True,  rotation_range=0, width_shift_range=0.05, height_shift_range=0.1,
                          shear_range=0.05, zoom_range=0.05, horizontal_flip=True, fill_mode='constant', cval=0)
 
     trainGen = trainGenerator(4, train_path, 'image', 'label', data_gen_args, save_to_dir=False)
     validGen = trainGenerator(4, valid_path, 'image', 'label', data_gen_args, save_to_dir=False)
-    model = unet(input_size=(512, 512, 1))
-    # model = unet(model_save_path + "unet_spine5.hdf5", input_size=(880, 880, 1))
-    model_checkpoint = ModelCheckpoint(model_save_path+"unet_spine.hdf5", monitor='loss', verbose=2, save_best_only=True)
+
+    model = unet(model_save_path + "2019-05-22_07-13_98.25.h5", input_size=(512, 512, 1))
+    # model = unet(input_size=(512, 512, 1))
+    # model_checkpoint = ModelCheckpoint(model_save_path+"unet_spine.hdf5", monitor='loss', verbose=2, save_best_only=True)
     history = LossHistory()
+
     model.fit_generator(trainGen, steps_per_epoch=2208/2, validation_data=validGen, validation_steps=252/2,
-                        epochs=60, verbose=1, callbacks=[history])  # steps_per_epoch=2208,validation_steps=252
+                        epochs=20, verbose=1, callbacks=[history])  # steps_per_epoch=2208,validation_steps=252
     history.loss_plot('epoch')
 
-    # model = load_model(model_save_path + "2019-05-18_17-13_98.24.h5")
+    # model = load_model(model_save_path + "2019-05-22_07-13_98.25.h5")
 
     # testGene = testGenerator(test_data, 4)
 

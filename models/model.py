@@ -1,9 +1,10 @@
 from keras.models import *
 from keras.layers import *
 from keras.optimizers import *
+from keras import backend as K
 
 
-def unet(pretrained_weights=None, input_size=(256, 256, 1)):
+def unet(pretrained_weights=None, input_size=(256, 256, 1), class_weights=[0.1, 0.9]):
     inputs = Input(input_size)
     conv1 = Conv2D(64, 3, activation='relu', padding='same', kernel_initializer='he_normal')(inputs)
     conv1 = Conv2D(64, 3, activation='relu', padding='same', kernel_initializer='he_normal')(conv1)
@@ -50,9 +51,17 @@ def unet(pretrained_weights=None, input_size=(256, 256, 1)):
     conv10 = Conv2D(1, 1, activation='sigmoid')(conv9)
 
     model = Model(inputs=inputs, outputs=conv10)
+
+    def weighted_binary_crossentropy(y_true, y_pred):
+        class_loglosses = K.mean(K.binary_crossentropy(y_true, y_pred), axis=[0, 1, 2])
+        return K.sum(class_loglosses * K.constant(class_weights))
+
+    model.compile(optimizer=Adam(lr=1e-4), loss=weighted_binary_crossentropy, metrics=['accuracy'])
+
+
     # sgd = SGD(lr=0.001, decay=1e-6, momentum=0.9, nesterov=False)
     # model.compile(optimizer=SGD(lr=0.001, decay=1e-6, momentum=0.9, nesterov=False), loss='binary_crossentropy', metrics=['accuracy'])
-    model.compile(optimizer=Adam(lr=1e-5), loss='binary_crossentropy', metrics=['accuracy'])
+    # model.compile(optimizer=Adam(lr=1e-4), loss='binary_crossentropy', metrics=['accuracy'])
 
     # model.summary()
 

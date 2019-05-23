@@ -17,6 +17,10 @@ config = tf.ConfigProto(allow_soft_placement=True)
 gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=0.7)
 config.gpu_options.allow_growth = True      # 限制gpu初始资源分配
 
+'''
+  加载网络的训练集验证集测试集，在训练时，验证集和测试集采用的是同一个文件夹下的图片
+'''
+
 Sky = [0, 0, 0]
 Building = [128, 0, 0]
 
@@ -143,7 +147,6 @@ def histequ_train(gray, nlevels=256):
 def histequ_test(gray, nlevels=256):
     """
     测试集直方图均衡化，训练集和测试集的格式不一样
-    Compute histogram
     """
     # gray = gray.astype('int64')
     histogram = np.bincount(gray.flatten(), minlength=nlevels)
@@ -202,15 +205,17 @@ def saveResult(save_path, test_path, npyfile,flag_multi_class = False, num_class
 
 
 if __name__ == '__main__':
-    train_data_src = "E:/data/spine/train/image/"
-    train_label_src = "E:/data/spine/train/label/"
-    train_data_path = "D:/pythoncode/segment/data/spine/train/image/"
-    train_label_path = "D:/pythoncode/segment/data/spine/train/label/"
-    test_data_src = "E:/data/spine/test/"
-    test_data_path = "D:/pythoncode/segment/data/spine/test/image/"
+    train_data_path = "../data/spine/train/image/"
+    train_label_path = "../data/spine/train/label/"
+    test_data_path = "../data/spine/test/image/"
 
-    train_data = "D:/pythoncode/segment/data/spine/train/image1/"
-    train_label = "D:/pythoncode/segment/data/spine/train/label1/"
+    train_data = "../data/spine/train/image1/"
+    train_label = "../data/spine/train/label1/"
+
+    """
+    下面的程序只是以前测试用的
+    """
+
     # images = os.listdir(train_data)
     # for image_name in images:
     #     if "image" in image_name:
@@ -222,7 +227,6 @@ if __name__ == '__main__':
     # imgs_p = cv2.resize(train_image, (2200, 2200), interpolation=cv2.INTER_CUBIC)
     # io.imshow(imgs_p)
     # io.show()
-
 
     # data_gen_args = dict(rotation_range=0.2, width_shift_range=0.05, height_shift_range=0.05,
     #                      shear_range=0.05, zoom_range=0.05, horizontal_flip=True, fill_mode='nearest')
