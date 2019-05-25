@@ -183,7 +183,7 @@ def testGenerator(test_path, num_image, predict_all=False, target_size=(512, 512
         img = io.imread(test_path+images[i], as_gray=as_gray)
         # img = histequ_test(img)
         img = img / 255
-        img = img - np.mean(img)
+        # img = img - np.mean(img)
         # img = img / np.std(img)
         # img = img / np.max(img)
         img = trans.resize(img, target_size, mode='constant')

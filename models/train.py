@@ -18,7 +18,7 @@ config.gpu_options.allow_growth = True
 set_session(tf.Session(config=config))
 
 model_save_path = '../data/save_models/'
-savemodel_threshold = 0.982  # 保存模型的最低准确率
+savemodel_threshold = 0.9823  # 保存模型的最低准确率
 max_acc = 0
 
 
@@ -91,24 +91,28 @@ if __name__ == '__main__':
     # train_data = "../data/spine/train/image1/"
     # train_label = "../data/spine/train/label1/"
 
-    data_gen_args = dict(samplewise_std_normalization=False, samplewise_center=True,  rotation_range=0, width_shift_range=0.05, height_shift_range=0.1,
+    data_gen_args = dict(samplewise_std_normalization=False, samplewise_center=False,  rotation_range=0, width_shift_range=0.05, height_shift_range=0.1,
                          shear_range=0.05, zoom_range=0.05, horizontal_flip=True, fill_mode='constant', cval=0)
 
     trainGen = trainGenerator(4, train_path, 'image', 'label', data_gen_args, save_to_dir=False)
     validGen = trainGenerator(4, valid_path, 'image', 'label', data_gen_args, save_to_dir=False)
+    class_weight = [0.2, 0.8]
 
-    model = unet(model_save_path + "2019-05-22_07-13_98.25.h5", input_size=(512, 512, 1))
-    # model = unet(input_size=(512, 512, 1))
-    # model_checkpoint = ModelCheckpoint(model_save_path+"unet_spine.hdf5", monitor='loss', verbose=2, save_best_only=True)
-    history = LossHistory()
+    # # model = unet(model_save_path + "2019-05-22_07-13_98.25.h5", input_size=(512, 512, 1), class_weights=class_weight)
+    # model = unet(input_size=(512, 512, 1), class_weights=class_weight)
+    # # model_checkpoint = ModelCheckpoint(model_save_path+"unet_spine.hdf5", monitor='loss', verbose=2, save_best_only=True)
+    # history = LossHistory()
+    #
+    # model.fit_generator(trainGen, steps_per_epoch=2208/2, validation_data=validGen, validation_steps=252/2,
+    #                     epochs=30, verbose=2, callbacks=[history])  # steps_per_epoch=2208,validation_steps=252
+    # history.loss_plot('epoch')
 
-    model.fit_generator(trainGen, steps_per_epoch=2208/2, validation_data=validGen, validation_steps=252/2,
-                        epochs=20, verbose=1, callbacks=[history])  # steps_per_epoch=2208,validation_steps=252
-    history.loss_plot('epoch')
 
-    # model = load_model(model_save_path + "2019-05-22_07-13_98.25.h5")
+    def weighted_binary_crossentropy(y_true, y_pred):
+        class_loglosses = K.mean(K.binary_crossentropy(y_true, y_pred), axis=[0, 1, 2])
+        return K.sum(class_loglosses * K.constant(class_weight))
+    model = load_model(model_save_path + "2019-05-25_01-32_98.30.h5", custom_objects={'weighted_binary_crossentropy': weighted_binary_crossentropy})
 
-    # testGene = testGenerator(test_data, 4)
 
     predict_num = 10
     predict_all_flag = True

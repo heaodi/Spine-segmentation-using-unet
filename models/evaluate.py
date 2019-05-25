@@ -5,6 +5,19 @@ import numpy as np
 import skimage.io as io
 from skimage import transform
 import datetime
+"""
+根据比赛的要求，采用的评判标准，这个程序写的不一定标准，可能需要进一步验证
+
+四、评分标准
+Dice 相似性系数是用分割标准和提交结果之间的重叠体素量的两倍除以分
+割标准和提交结果中的体素量的总和。PPV 是来衡量 TP 与 FP 之间数量关系。
+Sensitivity 灵敏度用来计算 TP 和 FN 的量。我们将用 Dice 相似性系数(DSC)，
+Positive Predicted Value(PPV)和 Sensitivity3 个值对分割性能的进行评估
+DSC =2𝑇𝑃/(𝐹𝑃+2𝑇𝑃+𝐹𝑁)    (1)
+PPV =𝑇𝑃/(𝑇𝑃+𝐹𝑃)          (2)
+Sensitivity =𝑇𝑃/(𝑇𝑃+𝐹𝑁)  (3)
+其中 TP、FP 和 FN 分别表示真阳性、假阳性和假阴性的数量。
+"""
 
 def evalue_score(predict_image_path, predict_label_path):
     image_names = os.listdir(predict_image_path)
