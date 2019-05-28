@@ -1,5 +1,6 @@
 from models.model import *
 from models.load_data import *
+from models.model1 import *
 import tensorflow as tf
 from keras.callbacks import ModelCheckpoint
 import matplotlib.pyplot as plt
@@ -99,7 +100,8 @@ if __name__ == '__main__':
     class_weight = [0.8, 0.2]
 
     # model = unet(model_save_path + "2019-05-22_07-13_98.25.h5", input_size=(512, 512, 1), class_weights=class_weight)
-    model = unet(input_size=(880, 880, 1), class_weights=class_weight)
+    # model = unet(input_size=(880, 880, 1), class_weights=class_weight)
+    model = get_unet_model(filters=64, input_size=(880, 880, 1))
     # model_checkpoint = ModelCheckpoint(model_save_path+"unet_spine.hdf5", monitor='loss', verbose=2, save_best_only=True)
     history = LossHistory()
 

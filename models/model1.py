@@ -17,36 +17,32 @@ from sklearn.model_selection import train_test_split
 import os
 from keras.preprocessing.image import array_to_img, img_to_array, load_img
 
-data_dir = "C:/Users/ec135/Downloads/github/car-foreground-segmentation/train/"
-mask_dir = "C:/Users/ec135/Downloads/github/car-foreground-segmentation/train_masks/"
-all_images = os.listdir(data_dir)
-train_images, validation_images = train_test_split(all_images, train_size=0.8, test_size=0.2)
 
-
-def data_gen_small(data_dir, mask_dir, images, batch_size, dims):
-    while True:
-        ix = np.random.choice(np.arange(len(images)), batch_size)
-        imgs = []
-        labels = []
-        for i in ix:
-            # images
-            original_img = load_img(data_dir + images[i])
-            resized_img = imresize(original_img, dims + [3])
-            array_img = img_to_array(resized_img) / 255
-            imgs.append(array_img)
-
-            # masks
-            original_mask = load_img(mask_dir + images[i].split(".")[0] + '_mask.gif')
-            resized_mask = imresize(original_mask, dims + [3])
-            array_mask = img_to_array(resized_mask) / 255
-            labels.append(array_mask[:, :, 0])
-        imgs = np.array(imgs)
-        labels = np.array(labels)
-        yield imgs, labels.reshape(-1, dims[0], dims[1], 1)
-
-
-train_gen = data_gen_small(data_dir, mask_dir, train_images, 5, [128, 128])
-img, msk = next(train_gen)
+#
+# def data_gen_small(data_dir, mask_dir, images, batch_size, dims):
+#     while True:
+#         ix = np.random.choice(np.arange(len(images)), batch_size)
+#         imgs = []
+#         labels = []
+#         for i in ix:
+#             # images
+#             original_img = load_img(data_dir + images[i])
+#             resized_img = imresize(original_img, dims + [3])
+#             array_img = img_to_array(resized_img) / 255
+#             imgs.append(array_img)
+#
+#             # masks
+#             original_mask = load_img(mask_dir + images[i].split(".")[0] + '_mask.gif')
+#             resized_mask = imresize(original_mask, dims + [3])
+#             array_mask = img_to_array(resized_mask) / 255
+#             labels.append(array_mask[:, :, 0])
+#         imgs = np.array(imgs)
+#         labels = np.array(labels)
+#         yield imgs, labels.reshape(-1, dims[0], dims[1], 1)
+#
+#
+# train_gen = data_gen_small(data_dir, mask_dir, train_images, 5, [128, 128])
+# img, msk = next(train_gen)
 
 
 def down(input_layer, filters, pool=True):
@@ -69,10 +65,10 @@ def up(input_layer, residual, filters):
     return conv2
 
 
-def get_unet_model(filters=64):
+def get_unet_model(filters=64, input_size=(256, 256, 1)):
     # Make a custom U-nets implementation.
     filters = 64
-    input_layer = Input(shape=[128, 128, 3])
+    input_layer = Input(input_size)
     layers = [input_layer]
     residuals = []
 
@@ -116,23 +112,19 @@ def get_unet_model(filters=64):
     out = Conv2D(filters=1, kernel_size=(1, 1), activation="sigmoid")(up4)
 
     model = Model(input_layer, out)
+
+    def dice_coef(y_true, y_pred):
+        smooth = 1e-5
+
+        y_true = tf.round(tf.reshape(y_true, [-1]))
+        y_pred = tf.round(tf.reshape(y_pred, [-1]))
+
+        isct = tf.reduce_sum(y_true * y_pred)
+
+        return 2 * isct / (tf.reduce_sum(y_true) + tf.reduce_sum(y_pred))
+
+    # model.compile(optimizer=Adam(1e-4), loss='binary_crossentropy', metrics=[dice_coef])
+    model.compile(optimizer=Adam(1e-4), loss='binary_crossentropy', metrics=['accuracy'])
     return model
 
-
-model = get_unet_model(filters=64)
-model.summary()
-
-
-def dice_coef(y_true, y_pred):
-    smooth = 1e-5
-
-    y_true = tf.round(tf.reshape(y_true, [-1]))
-    y_pred = tf.round(tf.reshape(y_pred, [-1]))
-
-    isct = tf.reduce_sum(y_true * y_pred)
-
-    return 2 * isct / (tf.reduce_sum(y_true) + tf.reduce_sum(y_pred))
-
-
-model.compile(optimizer=Adam(1e-4), loss='binary_crossentropy', metrics=[dice_coef])
-model.fit_generator(train_gen, steps_per_epoch=10, epochs=10)
+# model.fit_generator(train_gen, steps_per_epoch=10, epochs=10)
