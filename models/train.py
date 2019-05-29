@@ -97,16 +97,16 @@ if __name__ == '__main__':
 
     trainGen = trainGenerator(1, train_path, 'image', 'label', data_gen_args, save_to_dir=False)
     validGen = trainGenerator(1, valid_path, 'image', 'label', data_gen_args, save_to_dir=False)
-    class_weight = [0.8, 0.2]
+    class_weight = [0.4, 0.6]
 
     # model = unet(model_save_path + "2019-05-22_07-13_98.25.h5", input_size=(512, 512, 1), class_weights=class_weight)
     # model = unet(input_size=(880, 880, 1), class_weights=class_weight)
-    model = get_unet_model(filters=64, input_size=(880, 880, 1))
+    model = get_unet_model(filters=32, input_size=(880, 880, 1))
     # model_checkpoint = ModelCheckpoint(model_save_path+"unet_spine.hdf5", monitor='loss', verbose=2, save_best_only=True)
     history = LossHistory()
 
     model.fit_generator(trainGen, steps_per_epoch=2208, validation_data=validGen, validation_steps=252,
-                        epochs=30, verbose=1, callbacks=[history])  # steps_per_epoch=2208,validation_steps=252
+                        epochs=20, verbose=1, callbacks=[history])  # steps_per_epoch=2208,validation_steps=252
     history.loss_plot('epoch')
 
 
