@@ -43,7 +43,7 @@ COLOR_DICT = np.array([Sky, Building, Pole, Road, Pavement,
 
 def adjustData(img, mask, flag_multi_class, num_class):
     if(flag_multi_class):
-        # img = histequ_train(img)
+        img = histequ_train(img)
         img = img / 255
         # img = img / np.max(img)
         mask = mask[:, :, :, 0] if(len(mask.shape) == 4) else mask[:, :, 0]
@@ -181,7 +181,7 @@ def testGenerator(test_path, num_image, predict_all=False, target_size=(880, 880
     #     print('num_image:', num_image)
     for i in range(num_image):
         img = io.imread(test_path+images[i], as_gray=as_gray)
-        # img = histequ_test(img)
+        img = histequ_test(img)
         img = img / 255
         img = img - np.mean(img)
         # img = img / np.std(img)
