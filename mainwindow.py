@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'main.ui'
+# Form implementation generated from reading ui file 'mainwindow.ui'
 #
 # Created by: PyQt5 UI code generator 5.11.3
 #
@@ -143,6 +143,7 @@ class Ui_Form(object):
         self.horizontalLayout_4.addItem(spacerItem12)
 
         self.retranslateUi(Form)
+        self.pushButton_4.clicked.connect(Form.close)
         QtCore.QMetaObject.connectSlotsByName(Form)
 
     def retranslateUi(self, Form):
@@ -158,13 +159,3 @@ class Ui_Form(object):
         self.pushButton_3.setText(_translate("Form", "下一张"))
         self.pushButton_4.setText(_translate("Form", "退出"))
 
-if __name__=="__main__":
-    import sys
-
-    from PyQt5.QtGui import QIcon
-    app=QtWidgets.QApplication(sys.argv)
-    widget=QtWidgets.QWidget()
-    ui=Ui_Form()
-    ui.setupUi(widget)
-    widget.show()
-    sys.exit(app.exec_())

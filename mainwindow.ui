@@ -413,5 +413,22 @@
   </widget>
  </widget>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>pushButton_4</sender>
+   <signal>clicked()</signal>
+   <receiver>Form</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>809</x>
+     <y>647</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>921</x>
+     <y>643</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>
