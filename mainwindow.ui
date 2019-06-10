@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>936</width>
-    <height>707</height>
+    <height>713</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -83,48 +83,19 @@
    </property>
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
-     <spacer name="verticalSpacer">
-      <property name="orientation">
-       <enum>Qt::Vertical</enum>
-      </property>
-      <property name="sizeType">
-       <enum>QSizePolicy::Fixed</enum>
-      </property>
-      <property name="sizeHint" stdset="0">
-       <size>
-        <width>20</width>
-        <height>2</height>
-       </size>
-      </property>
-     </spacer>
-    </item>
-    <item>
      <layout class="QHBoxLayout" name="horizontalLayout_3">
-      <item>
-       <spacer name="horizontalSpacer_3">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
       <item>
        <widget class="QLabel" name="label_4">
         <property name="font">
          <font>
           <family>微软雅黑</family>
-          <pointsize>14</pointsize>
-          <weight>75</weight>
-          <bold>true</bold>
+          <pointsize>12</pointsize>
+          <weight>50</weight>
+          <bold>false</bold>
          </font>
         </property>
         <property name="text">
-         <string>原始图像</string>
+         <string>处理进度：</string>
         </property>
        </widget>
       </item>
@@ -138,24 +109,28 @@
         </property>
         <property name="sizeHint" stdset="0">
          <size>
-          <width>360</width>
+          <width>20</width>
           <height>20</height>
          </size>
         </property>
        </spacer>
       </item>
       <item>
-       <widget class="QLabel" name="label_5">
-        <property name="font">
-         <font>
-          <family>微软雅黑</family>
-          <pointsize>14</pointsize>
-          <weight>75</weight>
-          <bold>true</bold>
-         </font>
+       <widget class="QProgressBar" name="progressBar">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
         </property>
-        <property name="text">
-         <string>分割图像</string>
+        <property name="minimumSize">
+         <size>
+          <width>360</width>
+          <height>20</height>
+         </size>
+        </property>
+        <property name="value">
+         <number>0</number>
         </property>
        </widget>
       </item>
@@ -173,6 +148,22 @@
        </spacer>
       </item>
      </layout>
+    </item>
+    <item>
+     <spacer name="verticalSpacer">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+      <property name="sizeType">
+       <enum>QSizePolicy::Fixed</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>20</width>
+        <height>2</height>
+       </size>
+      </property>
+     </spacer>
     </item>
     <item>
      <spacer name="verticalSpacer_3">
@@ -212,6 +203,14 @@
           <height>440</height>
          </size>
         </property>
+        <property name="font">
+         <font>
+          <family>微软雅黑</family>
+          <pointsize>20</pointsize>
+          <weight>75</weight>
+          <bold>true</bold>
+         </font>
+        </property>
         <property name="styleSheet">
          <string notr="true">QLabel
 {
@@ -223,7 +222,10 @@
          <enum>QFrame::NoFrame</enum>
         </property>
         <property name="text">
-         <string>TextLabel</string>
+         <string>原始图像</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
         </property>
        </widget>
       </item>
@@ -247,6 +249,17 @@
           <height>440</height>
          </size>
         </property>
+        <property name="font">
+         <font>
+          <family>微软雅黑</family>
+          <pointsize>20</pointsize>
+          <weight>75</weight>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="layoutDirection">
+         <enum>Qt::LeftToRight</enum>
+        </property>
         <property name="styleSheet">
          <string notr="true">QLabel
 {
@@ -258,7 +271,10 @@
          <enum>QFrame::NoFrame</enum>
         </property>
         <property name="text">
-         <string>TextLabel</string>
+         <string>分割图像</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
         </property>
        </widget>
       </item>
@@ -285,8 +301,8 @@
   <widget class="QWidget" name="widget_3" native="true">
    <property name="geometry">
     <rect>
-     <x>20</x>
-     <y>620</y>
+     <x>10</x>
+     <y>630</y>
      <width>881</width>
      <height>58</height>
     </rect>
@@ -361,17 +377,33 @@
      </widget>
     </item>
     <item>
-     <spacer name="horizontalSpacer_8">
+     <widget class="QScrollBar" name="horizontalScrollBar">
+      <property name="minimumSize">
+       <size>
+        <width>300</width>
+        <height>25</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <family>微软雅黑</family>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="toolTipDuration">
+       <number>-1</number>
+      </property>
+      <property name="maximum">
+       <number>14</number>
+      </property>
+      <property name="pageStep">
+       <number>4</number>
+      </property>
       <property name="orientation">
        <enum>Qt::Horizontal</enum>
       </property>
-      <property name="sizeHint" stdset="0">
-       <size>
-        <width>72</width>
-        <height>20</height>
-       </size>
-      </property>
-     </spacer>
+     </widget>
     </item>
     <item>
      <widget class="QPushButton" name="pushButton_3">

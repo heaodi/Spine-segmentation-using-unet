@@ -193,6 +193,7 @@ def testGenerator(test_path, num_image, predict_all=False, target_size=(880, 880
 
 def saveResult(save_path, test_path, npyfile,flag_multi_class = False, num_class = 2):
     images = os.listdir(test_path)
+    print("image:", len(images))
     # if num_image > len(images):
     #    num_image = len(images)
     for i, item in enumerate(npyfile):
@@ -201,6 +202,7 @@ def saveResult(save_path, test_path, npyfile,flag_multi_class = False, num_class
         img[img > 0.4] = 255
         img[img <= 0.4] = 0
         img = img.astype(np.uint8)
+        print("i:", i)
         io.imsave(os.path.join(save_path, "pre_"+str(images[i])), img)
 
 

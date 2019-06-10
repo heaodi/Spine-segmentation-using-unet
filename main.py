@@ -1,21 +1,29 @@
 from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QFileDialog
-from PyQt5 import QtGui
 from mainwindow import Ui_MainWindow
-from PyQt5.QtGui import QPixmap, QImage
-from process.data import *
+from PyQt5.QtGui import QPixmap
+from models.load_data import *
 from models.model import *
 from scipy import misc
 import nibabel as nib
 import shutil
+import glob
 import sys
 import os
+
+config = tf.ConfigProto()
+config.gpu_options.allocator_type = 'BFC'
+config.gpu_options.per_process_gpu_memory_fraction = 0.7
+config.gpu_options.allow_growth = True
+set_session(tf.Session(config=config))
 
 model_save_path = './data/save_models/'
 predict_path = "./data/spine/valid/image/"
 test_path = "./data/spine/test_image/"
 image_save_path = "./data/spine/result/test_save/"
 predict_save_path = "./data/spine/result/predict_save/"
+
+
 class mywindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def __init__(self, parent=Ui_MainWindow):
         super(mywindow, self).__init__(parent)
@@ -24,22 +32,22 @@ class mywindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.indexnum = 0
         self.queue = 0
         self.startclink = False
+        self.loadrpedictmodel()
+
     def startClink(self):
-        valid_label = predict_path + "image_175_5.png"
+        # valid_label = predict_path + "image_175_5.png"
         # img_qt = QPixmap(valid_label).scaled(self.label.width(), self.label.height())
+        # self.label.setPixmap(img_qt)
         self.filename = self.msg()
         print(self.filename)
         filetype = self.filename.split(".")[-1]
         print(filetype)
         if filetype == "gz":
             self.nii_gz2png()
-
+            self.horizontalScrollBar.setValue(0)
+            self.predict_picture()
         self.show_image()
         # self.nii_gz2png(filename)
-
-        # self.label.setPixmap(img_qt)
-
-        # os._exit(0)
 
     def msg(self):
         filename1, filetype = QFileDialog.getOpenFileName(self,
@@ -93,9 +101,21 @@ class mywindow(QtWidgets.QMainWindow, Ui_MainWindow):
         predict_num = len(images)
         if predict_num > 0:
             testGene = testGenerator(image_save_path, predict_num, True)
-            results = self.model.predict_generator(testGene, predict_num, verbose=1)
-            saveResult(predict_path, predict_save_path, results)
+            self.results = self.model.predict_generator(testGene, predict_num, verbose=1)
+            self.saveResult()
 
+    def saveResult(self):
+        images = os.listdir(image_save_path)
+        print("image:", len(images))
+        # if num_image > len(images):
+        #    num_image = len(images)
+        for i, item in enumerate(self.results):
+            img = labelVisualize(2, COLOR_DICT, item) if False else item[:, :, 0]
+            # print(np.max(img))
+            img[img > 0.4] = 255
+            img[img <= 0.4] = 0
+            img = img.astype(np.uint8)
+            io.imsave(os.path.join(predict_save_path, "pre_"+str(images[i])), img)
 
 
 if __name__ == "__main__":
