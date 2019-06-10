@@ -29,6 +29,8 @@ class mywindow(QtWidgets.QMainWindow, Ui_MainWindow):
         super(mywindow, self).__init__(parent)
         self.setupUi(parent)
         self.pushButton.clicked.connect(self.startClink)
+        self.pushButton_2.clicked.connect(self.previousClink)
+        self.pushButton_3.clicked.connect(self.nextClink)
         self.indexnum = 0
         self.queue = 0
         self.startclink = False
@@ -48,6 +50,25 @@ class mywindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.predict_picture()
         self.show_image()
         # self.nii_gz2png(filename)
+
+    def previousClink(self):
+        if self.indexnum == 0:
+            self.indexnum = 0
+        else:
+            self.indexnum -= 1
+            self.horizontalScrollBar.setValue(self.indexnum)
+            self.show_image()
+
+    def nextClink(self):
+        if self.indexnum >= self.queue -1:
+            self.indexnum = self.queue
+            self.horizontalScrollBar.setValue(self.indexnum)
+        else:
+            self.indexnum += 1
+            self.horizontalScrollBar.setValue(self.indexnum)
+            self.show_image()
+
+
 
     def msg(self):
         filename1, filetype = QFileDialog.getOpenFileName(self,
@@ -78,6 +99,7 @@ class mywindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def show_image(self):
         train_data = glob.glob(image_save_path + "*.png")
+        predict_data = glob.glob(predict_save_path + "*.png")
         if train_data is not None:
             # self.img = self.img_src.get_data()
             if self.indexnum > self.queue:
@@ -86,7 +108,9 @@ class mywindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 self.indexnum = 0
             print(train_data[self.indexnum])
             self.img_show = QPixmap(train_data[self.indexnum]).scaled(self.label.width(), self.label.height())
+            self.pre_show = QPixmap(predict_data[self.indexnum]).scaled(self.label.width(), self.label.height())
             self.label.setPixmap(self.img_show)
+            self.label_3.setPixmap(self.pre_show)
 
 
     def loadrpedictmodel(self):
