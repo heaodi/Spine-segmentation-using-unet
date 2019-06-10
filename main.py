@@ -1,5 +1,6 @@
 from PyQt5 import QtWidgets
 from mainwindow import Ui_MainWindow
+from PyQt5.QtGui import QPixmap
 from process.data import *
 import sys
 import os
@@ -41,8 +42,13 @@ class mywindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
 
     def startClink(self, remark):
-        self.label.setText("hellow")
-        image =
+        valid_label = "./data/spine/valid/image/image_175_5.png"
+        # img_qt = QPixmap(valid_label).scaled(self.label.width(), self.label.height())
+
+        img = io.imread(valid_label, as_gray=True)
+        io.imshow(img)
+        io.show()
+        # self.label.setPixmap(img_qt)
         # os._exit(0)
 
 

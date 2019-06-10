@@ -51,9 +51,9 @@ if __name__ == '__main__':
     train_data_src = "E:/data/spine/train/image/"
     train_label_src = "E:/data/spine/train/label/"
     test_data_src = "E:/data/spine/test/"
-    train_data_path = "../data/spine/train/image/"
-    train_label_path = "../data/spine/train/label/"
-    test_data_path = "../data/spine/test/image/"
+    train_data_path = "./data/spine/train/image/"
+    train_label_path = "./data/spine/train/label/"
+    test_data_path = "./data/spine/test/image/"
     # nii2png(train_data_src, train_data_path)
     # nii2png(train_label_src, train_label_path)
     # nii2png(test_data_src, test_data_path)
