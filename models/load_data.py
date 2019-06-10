@@ -205,12 +205,12 @@ def saveResult(save_path, test_path, npyfile,flag_multi_class = False, num_class
 
 
 if __name__ == '__main__':
-    train_data_path = "./data/spine/train/image/"
-    train_label_path = "./data/spine/train/label/"
-    test_data_path = "./data/spine/test/image/"
+    train_data_path = "../data/spine/train/image/"
+    train_label_path = "../data/spine/train/label/"
+    test_data_path = "../data/spine/test/image/"
 
-    train_data = "./data/spine/train/image1/"
-    train_label = "./data/spine/train/label1/"
+    train_data = "../data/spine/train/image1/"
+    train_label = "../data/spine/train/label1/"
 
     """
     下面的程序只是以前测试用的

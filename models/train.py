@@ -83,14 +83,14 @@ class LossHistory(keras.callbacks.Callback):
 
 if __name__ == '__main__':
     # train_path = "D:/pythoncode/segment/data/spine/train/" #绝对路径
-    train_path = "./data/spine/train/"
-    valid_path = "./data/spine/valid/"
-    train_data = "./data/spine/train/image/"
-    train_label = "./data/spine/train/label/"
-    test_data = "./data/spine/test/image1/"
-    predict_path = "./data/spine/test/predict/"
-    # train_data = "./data/spine/train/image1/"
-    # train_label = "./data/spine/train/label1/"
+    train_path = "../data/spine/train/"
+    valid_path = "../data/spine/valid/"
+    train_data = "../data/spine/train/image/"
+    train_label = "../data/spine/train/label/"
+    test_data = "../data/spine/test/image1/"
+    predict_path = "../data/spine/test/predict/"
+    # train_data = "../data/spine/train/image1/"
+    # train_label = "../data/spine/train/label1/"
 
     data_gen_args = dict(samplewise_std_normalization=False, samplewise_center=True,  rotation_range=1, width_shift_range=0.05, height_shift_range=0.2,
                          shear_range=0.05, zoom_range=0.05, horizontal_flip=True, fill_mode='constant', cval=0)
@@ -101,19 +101,19 @@ if __name__ == '__main__':
 
     # model = unet(model_save_path + "2019-05-22_07-13_98.25.h5", input_size=(512, 512, 1), class_weights=class_weight)
     # model = unet(input_size=(880, 880, 1), class_weights=class_weight)
-    model = get_unet_model(filters=32, input_size=(880, 880, 1))
-    # model_checkpoint = ModelCheckpoint(model_save_path+"unet_spine.hdf5", monitor='loss', verbose=2, save_best_only=True)
-    history = LossHistory()
+    # model = get_unet_model(filters=32, input_size=(880, 880, 1))
+    # # model_checkpoint = ModelCheckpoint(model_save_path+"unet_spine.hdf5", monitor='loss', verbose=2, save_best_only=True)
+    # history = LossHistory()
+    #
+    # model.fit_generator(trainGen, steps_per_epoch=2208, validation_data=validGen, validation_steps=252,
+    #                     epochs=20, verbose=1, callbacks=[history])  # steps_per_epoch=2208,validation_steps=252
+    # history.loss_plot('epoch')
 
-    model.fit_generator(trainGen, steps_per_epoch=2208, validation_data=validGen, validation_steps=252,
-                        epochs=20, verbose=1, callbacks=[history])  # steps_per_epoch=2208,validation_steps=252
-    history.loss_plot('epoch')
 
-
-    # def weighted_binary_crossentropy(y_true, y_pred):
-    #     class_loglosses = K.mean(K.binary_crossentropy(y_true, y_pred), axis=[0, 1, 2])
-    #     return K.sum(class_loglosses * K.constant(class_weight))
-    # model = load_model(model_save_path + "2019-05-27_03-37_98.33.h5", custom_objects={'weighted_binary_crossentropy': weighted_binary_crossentropy})
+    def weighted_binary_crossentropy(y_true, y_pred):
+        class_loglosses = K.mean(K.binary_crossentropy(y_true, y_pred), axis=[0, 1, 2])
+        return K.sum(class_loglosses * K.constant(class_weight))
+    model = load_model(model_save_path + "2019-05-27_03-37_98.33.h5", custom_objects={'weighted_binary_crossentropy': weighted_binary_crossentropy})
 
 
     predict_num = 10

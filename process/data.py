@@ -133,13 +133,13 @@ def saveResult(save_path,npyfile,flag_multi_class = False, num_class = 2):
 if __name__ == '__main__':
     train_data_src = "E:/data/spine/train/image/"
     train_label_src = "E:/data/spine/train/label/"
-    train_data_path = "./data/spine/train/image/"
-    train_label_path = "./data/spine/train/label/"
+    train_data_path = "../data/spine/train/image/"
+    train_label_path = "../data/spine/train/label/"
     test_data_src = "E:/data/spine/test/"
-    test_data_path = "./data/spine/test/image/"
+    test_data_path = "../data/spine/test/image/"
 
-    train_data = "./data/spine/train/image1/"
-    train_label = "./data/spine/train/label1/"
+    train_data = "../data/spine/train/image1/"
+    train_label = "../data/spine/train/label1/"
     # images = os.listdir(train_data)
     # for image_name in images:
     #     if "image" in image_name:
