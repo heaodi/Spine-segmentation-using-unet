@@ -1,7 +1,8 @@
 from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QFileDialog
 from mainwindow import Ui_MainWindow
-from PyQt5.QtGui import QPixmap
+from PyQt5.QtGui import QPixmap,QPainter, QColor
+from PyQt5 import QtCore, QtGui, QtWidgets
 from models.load_data import *
 from models.model import *
 from scipy import misc
@@ -31,12 +32,29 @@ class mywindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.pushButton.clicked.connect(self.startClink)
         self.pushButton_2.clicked.connect(self.previousClink)
         self.pushButton_3.clicked.connect(self.nextClink)
+        # self.horizontalScrollBar.isRightToLeft.connect(self.pushButton_2)
+        # self.horizontalScrollBar.mousePressEvent()
         self.indexnum = 0
         self.queue = 0
         self.startclink = False
-        self.loadrpedictmodel()
+        # self.loadrpedictmodel()
+        # self.setObjectName('main')
+        # self.setStyleSheet("#main{background-image:url(./img/frame.png);}")
+        self.setStyleSheet("parent { background-color:url(D:/pythoncode/segment/img/frame.png);}")
+        self.paintEvent()
+        # self.init_ui()
+
+
+    def paintEvent(self):
+        print("name:", self.objectName())
+        painter = QPainter(self)
+        pixmap = QPixmap("D:/pythoncode/segment/img/frame.png")
+        painter.drawPixmap(self.rect(), pixmap)
+        print("size:", self.size())
+        # self.setStyleSheet("#mywindow{background-image:url(./img/frame.png);}")
 
     def startClink(self):
+        self.startclink = True
         # valid_label = predict_path + "image_175_5.png"
         # img_qt = QPixmap(valid_label).scaled(self.label.width(), self.label.height())
         # self.label.setPixmap(img_qt)
@@ -52,22 +70,23 @@ class mywindow(QtWidgets.QMainWindow, Ui_MainWindow):
         # self.nii_gz2png(filename)
 
     def previousClink(self):
-        if self.indexnum == 0:
-            self.indexnum = 0
-        else:
-            self.indexnum -= 1
-            self.horizontalScrollBar.setValue(self.indexnum)
-            self.show_image()
+        if self.startclink:
+            if self.indexnum == 0:
+                self.indexnum = 0
+            else:
+                self.indexnum -= 1
+                self.horizontalScrollBar.setValue(self.indexnum)
+                self.show_image()
 
     def nextClink(self):
-        if self.indexnum >= self.queue -1:
-            self.indexnum = self.queue
-            self.horizontalScrollBar.setValue(self.indexnum)
-        else:
-            self.indexnum += 1
-            self.horizontalScrollBar.setValue(self.indexnum)
-            self.show_image()
-
+        if self.startclink:
+            if self.indexnum >= self.queue -1:
+                self.indexnum = self.queue
+                self.horizontalScrollBar.setValue(self.indexnum)
+            else:
+                self.indexnum += 1
+                self.horizontalScrollBar.setValue(self.indexnum)
+                self.show_image()
 
 
     def msg(self):
@@ -148,5 +167,14 @@ if __name__ == "__main__":
     MainWindow = QtWidgets.QMainWindow()
     ui = mywindow(MainWindow)  # 注意把类名修改为myDialog
     # ui.setupUi(MainWindow)  myDialog类的构造函数已经调用了这个函数，这行代码可以删去
+    ui.setObjectName("mywindow")
+    ui.setStyleSheet("#mywindow{background-image:url(./img/frame.png);}")
+
+    # palette1 = QtGui.QPalette()
+    # palette1.setBrush(ui.backgroundRole(), QtGui.QBrush(QtGui.QPixmap("D:/pythoncode/segment/img/frame.png")))
+    # # palette1.setColor(ui.backgroundRole(), QColor(192, 253, 123))  # 背景颜色
+    # ui.setPalette(palette1)
+    # ui.setAutoFillBackground(True)
+
     MainWindow.show()
     sys.exit(app.exec_())
