@@ -15,6 +15,10 @@ config.gpu_options.per_process_gpu_memory_fraction = 0.7
 config.gpu_options.allow_growth = True
 set_session(tf.Session(config=config))
 
+"""
+本段程序用来直接预测nii.gz文件，并生成预测的nii.gz
+
+"""
 
 def weighted_binary_crossentropy(y_true, y_pred):
     class_loglosses = K.mean(K.binary_crossentropy(y_true, y_pred), axis=[0, 1, 2])
