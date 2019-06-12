@@ -46,7 +46,7 @@ if __name__ == '__main__':
 
     images = os.listdir(test_data)
     # for i in range(0, 1):
-    for i in range(0, len(images)):
+    for i in range(6, len(images)):
         print(images[i])
         # print(test_data+images[i])
         files = test_data+images[i]
@@ -72,11 +72,16 @@ if __name__ == '__main__':
         results = model.predict_generator(testGene, queue, verbose=0)
         # saveResult(predict_path, predict_result, results)
 
-        for q in range(0, queue):
-            imgs = results[q]
-            if imgs.shape[0] != width:
-                results[q] = transform.resize(imgs, (width, height), mode='constant')
-                print("width:", width)
+        if results[0].shape[0] != width:
+            results_tem = results   # 图片大小转换，转换成原始nii的分辨率
+            results = np.zeros((queue, width, height, 1))
+            # results[q] = trans.resize(imgs, (width, height), mode='constant')
+            for q in range(0, queue):
+                imgs = results_tem[q]
+                img_tem = imgs[:, :, 0]
+                img_tem = trans.resize(img_tem, (width, height), mode='constant')
+                img_tem = np.reshape(img_tem, img_tem.shape + (1,))
+                results[q] = img_tem
         results[results > 0.4] = 65535
         results[results <= 0.4] = 0
         results = results.astype(np.uint16)
