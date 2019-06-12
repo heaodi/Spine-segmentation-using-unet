@@ -1,4 +1,3 @@
-from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QFileDialog, QApplication
 from mainwindow import Ui_MainWindow
 from PyQt5.QtGui import QPixmap
