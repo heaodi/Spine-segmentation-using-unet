@@ -4,9 +4,12 @@ from models.model1 import *
 import tensorflow as tf
 from keras.callbacks import ModelCheckpoint
 import matplotlib.pyplot as plt
+from skimage import transform
 import nibabel as nib
 from scipy import misc
 import shutil
+from nibabel.viewers import OrthoSlicer3D
+
 import keras
 import datetime
 
@@ -54,12 +57,13 @@ if __name__ == '__main__':
     model = load_model(model_save_path + "2019-05-27_03-37_98.33.h5", custom_objects={'weighted_binary_crossentropy': weighted_binary_crossentropy})
 
     images = os.listdir(test_data)
-    for i in range(0, 1):
-    # for i in range(0, len(images)):
+    # for i in range(0, 1):
+    for i in range(0, len(images)):
         print(images[i])
         # print(test_data+images[i])
         files = test_data+images[i]
         testdata = loadnii(files)
+        print("shape:", testdata.shape)
         width, height, queue = testdata.dataobj.shape
         img = testdata.get_data()
         z = files.split(".")[-3].split("/")[-1]
@@ -80,8 +84,28 @@ if __name__ == '__main__':
         results = model.predict_generator(testGene, queue, verbose=0)
         saveResult(predict_path, predict_result, results)
 
-
-
+        for q in range(0, queue):
+            imgs = results[q]
+            if imgs.shape[0] != width:
+                # results[q] = transform.resize(imgs, (width, height), mode='constant')
+                results[q] = results[q]
+                print("width:", width)
+            # testdata.dataobj[:, :, q] = imgs[:, :]
+        # loadnii(files)
+        # data = np.ones((width, height, queue), dtype=np.int16)
+        # testdata.affine.shap
+        results[results > 0.4] = 65535
+        results[results <= 0.4] = 0
+        results = results.astype(np.uint16)
+        affine = testdata.affine
+        results_trans = results[:, :, :, 0]
+        results_save = results_trans.transpose((1, 2, 0))
+        # results_save = results_save.transpose((1, 0, 2))
+        # print("result shape:", results.shape)
+        img = nib.Nifti1Image(results_save, affine)
+        # print("affine:", affine)
+        # print("image shape:", results.shape)
+        nib.save(img, save_nii_path + images[i])
 
 
     # if predict_all_flag is True or predict_num > len(images):
