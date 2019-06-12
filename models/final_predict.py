@@ -46,7 +46,7 @@ if __name__ == '__main__':
 
     images = os.listdir(test_data)
     # for i in range(0, 1):
-    for i in range(6, len(images)):
+    for i in range(0, len(images)):
         print(images[i])
         # print(test_data+images[i])
         files = test_data+images[i]

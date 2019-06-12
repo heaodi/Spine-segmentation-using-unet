@@ -1,8 +1,8 @@
 from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QFileDialog, QApplication
 from mainwindow import Ui_MainWindow
-from PyQt5.QtGui import QPixmap, QPainter, QColor
-from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtGui import QPixmap
+from PyQt5 import QtWidgets
 from PyQt5.QtCore import *
 from models.load_data import *
 from models.model import *
@@ -87,7 +87,7 @@ class mywindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def nextClink(self):
         if self.startclink:
             if self.indexnum >= self.queue -1:
-                self.indexnum = self.queue
+                self.indexnum = self.queue -1
                 self.horizontalScrollBar.setValue(self.indexnum)
             else:
                 self.indexnum += 1
