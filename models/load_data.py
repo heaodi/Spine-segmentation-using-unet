@@ -6,6 +6,7 @@ import skimage.transform as trans
 import tensorflow as tf
 # import matplotlib
 # matplotlib.use('TkAgg')
+# from keras.backend.tensorflow_backend import set_session
 
 config = tf.ConfigProto(allow_soft_placement=True)
 gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=0.7)

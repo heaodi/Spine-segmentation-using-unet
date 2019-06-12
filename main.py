@@ -11,12 +11,16 @@ import shutil
 import glob
 import sys
 import os
+# from keras.backend.tensorflow_backend import set_session
+# config = tf.ConfigProto()
+# config.gpu_options.allocator_type = 'BFC'
+# config.gpu_options.per_process_gpu_memory_fraction = 0.7
+# config.gpu_options.allow_growth = True
+# set_session(tf.Session(config=config))
+config = tf.ConfigProto(allow_soft_placement=True)
+gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=0.7)
+config.gpu_options.allow_growth = True      # 限制gpu初始资源分配
 
-config = tf.ConfigProto()
-config.gpu_options.allocator_type = 'BFC'
-config.gpu_options.per_process_gpu_memory_fraction = 0.7
-config.gpu_options.allow_growth = True
-set_session(tf.Session(config=config))
 
 model_save_path = './data/save_models/'
 predict_path = "./data/spine/valid/image/"
