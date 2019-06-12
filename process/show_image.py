@@ -13,7 +13,7 @@ import numpy as np
 from models.load_data import *
 # img = nib.load('E:/data/spine/train/image/Case1.nii')
 example_filename = 'E:/data/spine/train/image/Case1.nii'
-test = "D:/pythoncode/segment/data/final_result/save_nii/Case196.nii.gz"
+test = "D:/pythoncode/segment/data/final_result/save_nii/Case197.nii.gz"
 # example_filename = 'E:/data/spine/train/label/mask_case1.nii'
 
 """

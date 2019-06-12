@@ -27,27 +27,6 @@ def weighted_binary_crossentropy(y_true, y_pred):
     return K.sum(class_loglosses * K.constant(class_weight))
 
 
-def loadnii(filename):
-    img_src = nib.load(filename)
-    width, height, queue = img_src.dataobj.shape
-    # print(width, height, queue)
-    return img_src
-
-def saveResult(image_save_path, predict_save_path, results):
-    images = os.listdir(image_save_path)
-    print("image:", len(images))
-    # if num_image > len(images):
-    #    num_image = len(images)
-    for i, item in enumerate(results):
-        img = labelVisualize(2, COLOR_DICT, item) if False else item[:, :, 0]
-        # print(np.max(img))
-        img[img > 0.4] = 255
-        img[img <= 0.4] = 0
-        img = img.astype(np.uint8)
-        io.imsave(os.path.join(predict_save_path, "pre_"+str(images[i])), img)
-
-
-
 if __name__ == '__main__':
     test_data = "../data/final_result/test_image/"
     predict_path = "../data/final_result/nii_png/"
@@ -62,7 +41,7 @@ if __name__ == '__main__':
         print(images[i])
         # print(test_data+images[i])
         files = test_data+images[i]
-        testdata = loadnii(files)
+        testdata = nib.load(files)
         print("shape:", testdata.shape)
         width, height, queue = testdata.dataobj.shape
         img = testdata.get_data()
@@ -87,31 +66,16 @@ if __name__ == '__main__':
         for q in range(0, queue):
             imgs = results[q]
             if imgs.shape[0] != width:
-                # results[q] = transform.resize(imgs, (width, height), mode='constant')
-                results[q] = results[q]
+                results[q] = transform.resize(imgs, (width, height), mode='constant')
                 print("width:", width)
-            # testdata.dataobj[:, :, q] = imgs[:, :]
-        # loadnii(files)
-        # data = np.ones((width, height, queue), dtype=np.int16)
-        # testdata.affine.shap
         results[results > 0.4] = 65535
         results[results <= 0.4] = 0
         results = results.astype(np.uint16)
         affine = testdata.affine
-        results_trans = results[:, :, :, 0]
-        results_save = results_trans.transpose((1, 2, 0))
-        # results_save = results_save.transpose((1, 0, 2))
+        results_trans = results[:, :, :, 0]  # 通道转换
+        results_save = results_trans.transpose((1, 2, 0))  # 通道转换
         # print("result shape:", results.shape)
-        img = nib.Nifti1Image(results_save, affine)
+        img = nib.Nifti1Image(results_save, affine)  # 保存nii
         # print("affine:", affine)
         # print("image shape:", results.shape)
         nib.save(img, save_nii_path + images[i])
-
-
-    # if predict_all_flag is True or predict_num > len(images):
-    #     predict_num = len(images)
-    # testGene = testGenerator(predict_data_path, predict_num, predict_all_flag)
-    #
-    # results = model.predict_generator(testGene, predict_num, verbose=1)
-    # saveResult(predict_path, predict_data_path, results)
-
