@@ -2,16 +2,12 @@ from models.model import *
 from models.load_data import *
 from models.model1 import *
 import tensorflow as tf
-from keras.callbacks import ModelCheckpoint
-import matplotlib.pyplot as plt
 from skimage import transform
 import nibabel as nib
 from scipy import misc
 import shutil
-from nibabel.viewers import OrthoSlicer3D
+# from nibabel.viewers import OrthoSlicer3D
 
-import keras
-import datetime
 
 config = tf.ConfigProto()
 config.gpu_options.allocator_type = 'BFC'
@@ -19,15 +15,28 @@ config.gpu_options.per_process_gpu_memory_fraction = 0.7
 config.gpu_options.allow_growth = True
 set_session(tf.Session(config=config))
 
-model_save_path = '../data/save_models/'
-
 
 def weighted_binary_crossentropy(y_true, y_pred):
     class_loglosses = K.mean(K.binary_crossentropy(y_true, y_pred), axis=[0, 1, 2])
     return K.sum(class_loglosses * K.constant(class_weight))
 
 
+def saveResult(image_save_path, predict_save_path, results):
+    images = os.listdir(image_save_path)
+    print("image:", len(images))
+    # if num_image > len(images):
+    #    num_image = len(images)
+    for i, item in enumerate(results):
+        img = labelVisualize(2, COLOR_DICT, item) if False else item[:, :, 0]
+        # print(np.max(img))
+        img[img > 0.4] = 255
+        img[img <= 0.4] = 0
+        img = img.astype(np.uint8)
+        io.imsave(os.path.join(predict_save_path, "pre_"+str(images[i])), img)
+
+
 if __name__ == '__main__':
+    model_save_path = '../data/save_models/'
     test_data = "../data/final_result/test_image/"
     predict_path = "../data/final_result/nii_png/"
     predict_result = "../data/final_result/predict/"
@@ -61,7 +70,7 @@ if __name__ == '__main__':
 
         testGene = testGenerator(predict_path, queue, True)
         results = model.predict_generator(testGene, queue, verbose=0)
-        saveResult(predict_path, predict_result, results)
+        # saveResult(predict_path, predict_result, results)
 
         for q in range(0, queue):
             imgs = results[q]
