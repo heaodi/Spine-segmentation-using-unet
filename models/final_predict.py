@@ -7,7 +7,7 @@ import nibabel as nib
 from scipy import misc
 import shutil
 # from nibabel.viewers import OrthoSlicer3D
-
+from keras.backend.tensorflow_backend import set_session
 
 config = tf.ConfigProto()
 config.gpu_options.allocator_type = 'BFC'
