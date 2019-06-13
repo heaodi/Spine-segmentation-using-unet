@@ -6,7 +6,7 @@ from keras.callbacks import ModelCheckpoint
 import matplotlib.pyplot as plt
 import keras
 import datetime
-# from keras.backend.tensorflow_backend import set_session
+from keras.backend.tensorflow_backend import set_session
 
 # config = tf.ConfigProto(allow_soft_placement=True)
 # gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=0.7)
@@ -96,18 +96,21 @@ if __name__ == '__main__':
                          shear_range=0.05, zoom_range=0.05, horizontal_flip=True, fill_mode='constant', cval=0)
 
     trainGen = trainGenerator(1, train_path, 'image', 'label', data_gen_args, save_to_dir=False)
-    validGen = trainGenerator(1, valid_path, 'image', 'label', data_gen_args, save_to_dir=False)
+    # validGen = trainGenerator(1, valid_path, 'image', 'label', data_gen_args, save_to_dir=False)
     class_weight = [0.4, 0.6]
-    model = unet_plus(880, 880, color_type=1, num_class=1, deep_supervision=True)
+    # model = unet_plus(880, 880, color_type=1, num_class=1, deep_supervision=True)
     # model = unet(model_save_path + "2019-05-22_07-13_98.25.h5", input_size=(512, 512, 1), class_weights=class_weight)
-    # model = unet(input_size=(880, 880, 1), class_weights=class_weight)
+    model = unet(input_size=(880, 880, 1), class_weights=class_weight)
     # model = get_unet_model(filters=32, input_size=(880, 880, 1))
     # model_checkpoint = ModelCheckpoint(model_save_path+"unet_spine.hdf5", monitor='loss', verbose=2, save_best_only=True)
-    history = LossHistory()
+    # history = LossHistory()
 
-    model.fit_generator(trainGen, steps_per_epoch=2208, validation_data=validGen, validation_steps=252,
-                        epochs=20, verbose=1, callbacks=[history])  # steps_per_epoch=2208,validation_steps=252
-    history.loss_plot('epoch')
+    # model.fit_generator(trainGen, steps_per_epoch=2208, validation_data=validGen, validation_steps=252,
+    #                     epochs=20, verbose=1, callbacks=[history])  # steps_per_epoch=2208,validation_steps=252
+    # history.loss_plot('epoch')
+    model_checkpoint = ModelCheckpoint(model_save_path + "unet_spine_all.hdf5", monitor='loss', verbose=2,
+                                       save_best_only=True)
+    model.fit_generator(trainGen, steps_per_epoch=2460, epochs=20, verbose=1, callbacks=[model_checkpoint])
 
 
     # def weighted_binary_crossentropy(y_true, y_pred):
@@ -118,7 +121,7 @@ if __name__ == '__main__':
 
     predict_num = 10
     predict_all_flag = True
-    predict_data_path = valid_path+'image/'
+    predict_data_path = "../data/spine/test/image/"
     images = os.listdir(predict_data_path)
     if predict_all_flag is True or predict_num > len(images):
         predict_num = len(images)
