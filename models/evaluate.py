@@ -67,9 +67,9 @@ def evalue_score(predict_image_path, predict_label_path):
 
 
 if __name__ == '__main__':
-    valid_label = "./data/spine/valid/label/"
-    valid_image = "./data/spine/test/predict/"
-    result_save_path = "./data/results/"
+    valid_label = "../data/spine/valid/label/"
+    valid_image = "../data/spine/test/predict/"
+    result_save_path = "../data/results/"
     score = evalue_score(valid_image, valid_label)
     acc = 0
     size = 0
