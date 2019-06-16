@@ -70,7 +70,10 @@ if __name__ == '__main__':
             os.mkdir(predict_result)
 
         for j in range(0, queue):
-            misc.imsave(predict_path + z + '_' + str(j) + '.png', img[:, :, j])
+            if (j+1) < 10:
+              misc.imsave(predict_path + z + '_0' + str(j) + '.png', img[:, :, j])
+            else:
+              misc.imsave(predict_path + z + '_' + str(j) + '.png', img[:, :, j])
 
         testGene = testGenerator(predict_path, queue, True)
         results = model.predict_generator(testGene, queue, verbose=0)

@@ -123,7 +123,10 @@ class mywindow(QtWidgets.QMainWindow, Ui_MainWindow):
         z = self.filename.split(".")[-3].split("/")[-1]
         # print("z:", z)
         for j in range(0, self.queue):
-             misc.imsave(image_save_path + z + '_' + str(j) + '.png', img[:, :, j])
+            if (j+1) < 10:
+               misc.imsave(image_save_path + z + '_0' + str(j) + '.png', img[:, :, j])
+            else:
+               misc.imsave(image_save_path + z + '_' + str(j) + '.png', img[:, :, j])
 
     def show_image(self):
         train_data = glob.glob(image_save_path + "*.png")
