@@ -40,7 +40,13 @@ def nii2png(data_path, save_path, start_num=0):
         # img = img_as_float64(img / np.max(img))
         for j in range(0, queue):
             # io.imsave(save_path + y + str(data_index) + '_' + str(j) + '.png', img[:, :, j])
-            misc.imsave(save_path + y + str(data_index) + '_' + str(j) + '.png', img[:, :, j])
+            # misc.imsave(save_path + y + str(data_index) + '_' + str(j) + '.png', img[:, :, j])
+            if (j+1) < 10:
+               misc.imsave(save_path + y + str(data_index) + '_0' + str(j) + '.png', img[:, :, j])
+            else:
+               misc.imsave(save_path + y + str(data_index) + '_' + str(j) + '.png', img[:, :, j])
+
+
             # plt.figure(0, figsize=(float(width / 100), float(height / 100)))
             # plt.imshow(showimage, cmap='gray')
             # plt.savefig(save_path + str(data_index) + '_' + str(j) + '.png')
