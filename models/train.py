@@ -50,7 +50,7 @@ class LossHistory(keras.callbacks.Callback):
                 f.writelines('Train epoch:\n'+str(len(self.val_acc['epoch'])))
             f.close()
             model.save(model_name+'.h5')
-        max_acc = logs.get('val_acc')
+            max_acc = logs.get('val_acc')
 
     def loss_plot(self, loss_type):
         iters = range(len(self.losses[loss_type]))
