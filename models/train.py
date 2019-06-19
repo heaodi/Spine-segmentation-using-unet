@@ -20,7 +20,7 @@ set_session(tf.Session(config=config))
 
 model_save_path = '../data/save_models/'
 savemodel_threshold = 0.9825  # 保存模型的最低准确率
-max_acc = 0
+max_acc = 0   # 用来控制保存最高精度模型
 
 
 class LossHistory(keras.callbacks.Callback):

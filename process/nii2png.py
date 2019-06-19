@@ -13,7 +13,8 @@ matplotlib.use('TkAgg')
 
 def nii2png(data_path, save_path, start_num=0):
     """
-    把data_path下的nii转化为png保存在save_path，原始nii为16bit，保存为png时转换成了8bit
+    把data_path下的nii转化为png保存在save_path，原始nii为16bit，保存为png时转换成了8bit，也可以保存为16bit，但
+    keras的扩充工具只能读取8bit的图片
 
     """
     train_data = glob.glob(data_path + "*.nii")
@@ -40,7 +41,6 @@ def nii2png(data_path, save_path, start_num=0):
         # img = img_as_float64(img / np.max(img))
         for j in range(0, queue):
             # io.imsave(save_path + y + str(data_index) + '_' + str(j) + '.png', img[:, :, j])
-            # misc.imsave(save_path + y + str(data_index) + '_' + str(j) + '.png', img[:, :, j])
             if (j+1) < 10:
                misc.imsave(save_path + y + str(data_index) + '_0' + str(j) + '.png', img[:, :, j])
             else:

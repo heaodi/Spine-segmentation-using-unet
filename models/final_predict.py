@@ -2,7 +2,7 @@ from models.model import *
 from models.load_data import *
 from models.model1 import *
 import tensorflow as tf
-from skimage import transform
+# from skimage import transform
 import nibabel as nib
 from scipy import misc
 import shutil
