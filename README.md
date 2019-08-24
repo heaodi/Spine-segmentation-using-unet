@@ -7,4 +7,4 @@ tensorflow 1.10.0
 <div align=center><img width="500" src="https://github.com/heaodi/Spine-segmentation-using-unet/blob/master/img/ui.jpg"/></div>
 
 ### 程序运行结果:  
-<div align=center><img width="500" src="https://github.com/heaodi/Spine-segmentation-using-unet/blob/master/img/result.jpg"/></div>
+<div align=center><img width="500" src="https://github.com/heaodi/Spine-segmentation-using-unet/blob/master/img/result1.jpg"/></div>
